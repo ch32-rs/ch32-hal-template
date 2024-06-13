@@ -8,7 +8,7 @@ use hal::gpio::{AnyPin, Level, Output, Pin};
 use hal::println;
 use {ch32_hal as hal, panic_halt as _};
 
-#[embassy_executor::task(pool_size = 2)]
+#[embassy_executor::task]
 async fn blink(pin: AnyPin, interval_ms: u64) {
     let mut led = Output::new(pin, Level::Low, Default::default());
 

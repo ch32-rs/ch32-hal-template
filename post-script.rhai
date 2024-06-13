@@ -1,1 +1,1 @@
-file::rename("README.template", "README.md");
+file::rename("README-TEMPLATE.md", "README.md");

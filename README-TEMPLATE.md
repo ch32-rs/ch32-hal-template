@@ -1,4 +1,4 @@
-# {{ crate_name }}
+# {{ project-name }}
 
 ### Build
 

@@ -1,15 +1,15 @@
-{% if mcu_family == "ch32v003" %}
+{% if mcu_family == "ch32v003" -%}
 [build]
 target = "riscv32ec-unknown-none-elf.json"
-{% else %}
+{%- else -%}
 [build]
 target = "{{ target }}"
-{% endif %}
+{%- endif %}
 
 [target."{{ target }}"]
 runner = "wlink -v flash --enable-sdi-print --watch-serial"
 
-{% if mcu_family == "ch32v003" %}
+{% if mcu_family == "ch32v003" -%}
 [unstable]
 build-std = ["core"]
 {% endif %}
