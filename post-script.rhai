@@ -1,0 +1,1 @@
+file::rename("README.template", "README.md");

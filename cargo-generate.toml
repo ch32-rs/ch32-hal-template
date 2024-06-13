@@ -1,0 +1,49 @@
+[template]
+cargo_generate_version = ">=0.17.4"
+ignore = [".git", "README.md"]
+
+[hooks]
+pre = ["pre-script.rhai"]
+post = ["post-script.rhai"]
+
+[placeholders.mcu_family]
+type = "string"
+prompt = "Which MCU family to target?"
+choices = ["ch32l003", "ch32v003", "ch32v103", "ch32v203", "ch32v208", "ch32v303", "ch32v305", "ch32v307", "ch32x033", "ch32x034", "ch32x035"]
+default = "ch32v003"
+
+[conditional.'mcu_family != "ch32v003"']
+ignore = [ "riscv32ec-unknown-none-elf.json" ]
+
+[conditional.'mcu_family == "ch32l003"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32l003 variant to use?", choices = ["ch32l103c8t6", "ch32l103f7p6", "ch32l103f8p6", "ch32l103f8u6", "ch32l103g8r6", "ch32l103k8u6"], default = "ch32l103f8p6" }
+
+[conditional.'mcu_family == "ch32v003"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32v003 variant to use?", choices = ["ch32v003a4m6", "ch32v003f4p6", "ch32v003f4u6", "ch32v003j4m6"], default = "ch32v003f4p6" }
+
+[conditional.'mcu_family == "ch32v103"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32v103 variant to use?", choices = ["ch32v103c6t6", "ch32v103c8t6", "ch32v103c8u6", "ch32v103r8t6"], default = "ch32v103c8t6" }
+
+[conditional.'mcu_family == "ch32v203"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32v203 variant to use?", choices = ["ch32v203c8t6", "ch32v203c8u6", "ch32v203f6p6", "ch32v203f8p6", "ch32v203f8u6", "ch32v203g6u6", "ch32v203g8r6", "ch32v203k6t6", "ch32v203k8t6", "ch32v203rbt6"], default = "ch32v203c8t6" }
+
+[conditional.'mcu_family == "ch32v208"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32v208 variant to use?", choices = ["ch32v208cbu6", "ch32v208gbu6", "ch32v208rbt6", "ch32v208wbu6"], default = "ch32v208rbt6" }
+
+[conditional.'mcu_family == "ch32v303"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32v303 variant to use?", choices = ["ch32v303cbt6", "ch32v303rbt6", "ch32v303rct6", "ch32v303vct6"], default = "ch32v303rbt6" }
+
+[conditional.'mcu_family == "ch32v305"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32v305 variant to use?", choices = ["ch32v305fbp6", "ch32v305gbu6", "ch32v305rbt6"], default = "ch32v305rbt6" }
+
+[conditional.'mcu_family == "ch32v307"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32v307 variant to use?", choices = ["ch32v307rct6", "ch32v307vct6", "ch32v307wcu6"], default = "ch32v307vct6" }
+
+[conditional.'mcu_family == "ch32x033"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32x033 variant to use?", choices = ["ch32x033f8p6"], default = "ch32x033f8p6" }
+
+[conditional.'mcu_family == "ch32x034"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32x034 variant to use?", choices = ["ch32x034f8p6", "ch32x034f8u6"], default = "ch32x034f8p6" }
+
+[conditional.'mcu_family == "ch32x035"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32x035 variant to use?", choices = ["ch32x035c8t6", "ch32x035f7p6", "ch32x035f8u6", "ch32x035g8r6", "ch32x035g8u6", "ch32x035r8t6"], default = "ch32x035f7p6" }
