@@ -8,7 +8,6 @@ use hal::gpio::{AnyPin, Level, Output, Pin};
 use hal::println;
 use {ch32_hal as hal, panic_halt as _};
 
-
 #[embassy_executor::task(pool_size = 2)]
 async fn blink(pin: AnyPin, interval_ms: u64) {
     let mut led = Output::new(pin, Level::Low, Default::default());
@@ -27,7 +26,8 @@ async fn main(spawner: Spawner) -> ! {
     let p = hal::init(hal::Config::default());
     hal::embassy::init();
 
-    spawner.spawn(blink(p.PC4.degrade(), 110)).unwrap();
+    // Adjust the LED GPIO according to your board
+    spawner.spawn(blink(p.PC13.degrade(), 100)).unwrap();
 
     loop {
         Timer::after_millis(1000).await;
