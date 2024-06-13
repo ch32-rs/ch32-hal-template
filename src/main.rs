@@ -27,7 +27,7 @@ async fn main(spawner: Spawner) -> ! {
     hal::embassy::init();
 
     // Adjust the LED GPIO according to your board
-    spawner.spawn(blink(p.PC13.degrade(), 100)).unwrap();
+    spawner.spawn(blink(p.PA0.degrade(), 100)).unwrap();
 
     loop {
         Timer::after_millis(1000).await;

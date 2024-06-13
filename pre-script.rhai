@@ -14,5 +14,11 @@ let targets = #{
 
 let mcu_family = variable::get("mcu_family");
 let target = targets.get(mcu_family);
-
 variable::set("target", `${target}`);
+
+// Handle families with only one variant
+if mcu_family == "ch641" {
+    variable::set("mcu", "ch641");
+} else if mcu_family == "ch32x033" {
+    variable::set("mcu", "ch32x033f8p6");
+}
