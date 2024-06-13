@@ -2,6 +2,7 @@
 #![no_main]
 #![feature(type_alias_impl_trait)]
 
+{% if embassy -%}
 use embassy_executor::Spawner;
 use embassy_time::Timer;
 use ch32_hal::gpio::{AnyPin, Level, Output, Pin};
@@ -29,9 +30,28 @@ async fn main(spawner: Spawner) -> ! {
 
     // Adjust the LED GPIO according to your board
     spawner.spawn(blink(p.PA0.degrade(), 1000)).unwrap();
-
     loop {
         Timer::after_millis(1000).await;
         println!("tick");
     }
 }
+{%- else -%}
+use hal::delay::Delay;
+use hal::gpio::{Level, Output};
+use {ch32_hal as hal, panic_halt as _};
+
+#[qingke_rt::entry]
+fn main() -> ! {
+    hal::debug::SDIPrint::enable();
+    let p = hal::init(hal::Config::default());
+    let mut delay = Delay;
+
+    // Adjust the LED GPIO according to your board
+    let mut led = Output::new(p.PA0, Level::Low, Default::default());
+    loop {
+        led.toggle();
+        delay.delay_ms(1000);
+        hal::println!("toggle!");
+    }
+}
+{%- endif %}

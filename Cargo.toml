@@ -10,13 +10,19 @@ name = "{{ project-name }}"
 harness = false # do not use the built in cargo test harness -> resolve rust-analyzer errors
 
 [dependencies]
+{% if embassy_dep -%}
 ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", features = [
     "{{ mcu }}",
     "embassy",
+{%- else -%}
+ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", default-features = false, features = [
+    "{{ mcu }}",
+{%- endif %}
     "time-driver-tim2",
     "rt",
     "memory-x",
 ] }
+{% if embassy_dep -%}
 embassy-executor = { version = "0.6.1", features = [
     "integrated-timers",
     "arch-spin",
@@ -24,6 +30,7 @@ embassy-executor = { version = "0.6.1", features = [
     "task-arena-size-128", # or better use nightly, but fails on recent Rust versions
 ] }
 embassy-time = { version = "0.3.0" }
+{%- endif %}
 qingke-rt = "0.5.0"
 qingke = "0.5.0"
 embedded-hal = "1.0.0"
