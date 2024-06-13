@@ -6,6 +6,12 @@ ignore = [".git", ".github", "README.md"]
 pre = ["pre-script.rhai"]
 post = ["post-script.rhai"]
 
+# Embassy option
+[placeholders.embassy]
+type = "bool"
+prompt = "Enable embassy (async) support?"
+default = true
+
 [placeholders.mcu_family]
 type = "string"
 prompt = "Which MCU family to target?"
