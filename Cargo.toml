@@ -8,10 +8,13 @@ license = "MIT OR Apache-2.0"
 [dependencies]
 ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", features = [
     "{{ mcu }}",
+{% if embassy -%}
     "embassy",
+{%- endif %}
     "time-driver-tim2",
     "rt",
 ] }
+{% if embassy -%}
 embassy-executor = { version = "0.5.0", features = [
     "nightly",
     "integrated-timers",
@@ -19,6 +22,7 @@ embassy-executor = { version = "0.5.0", features = [
     "executor-thread",
 ] }
 embassy-time = { version = "0.3.0" }
+{%- endif %}
 qingke-rt = "0.2.1"
 qingke = "0.2.0"
 embedded-hal = "1.0.0"
