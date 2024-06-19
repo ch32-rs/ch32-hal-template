@@ -1,2 +1,5 @@
 [toolchain]
-channel = "nightly"
+channel = "nightly-2024-06-12"
+{% if mcu_family != "ch32v003" and mcu_family != "ch641" -%}
+targets = ["{{ target }}"]
+{%- endif %}
