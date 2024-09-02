@@ -4,10 +4,8 @@
 
 use embassy_executor::Spawner;
 use embassy_time::Timer;
-
 use ch32_hal::gpio::{AnyPin, Level, Output, Pin};
 use ch32_hal::println;
-
 use panic_halt as _;
 
 
