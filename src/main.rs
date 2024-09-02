@@ -4,9 +4,12 @@
 
 use embassy_executor::Spawner;
 use embassy_time::Timer;
-use hal::gpio::{AnyPin, Level, Output, Pin};
-use hal::println;
-use {ch32_hal as hal, panic_halt as _};
+
+use ch32_hal::gpio::{AnyPin, Level, Output, Pin};
+use ch32_hal::println;
+
+use panic_halt as _;
+
 
 #[embassy_executor::task]
 async fn blink(pin: AnyPin, interval_ms: u64) {
