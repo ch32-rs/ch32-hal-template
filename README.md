@@ -19,11 +19,16 @@ If `cargo generate` is not installed:
 cargo install cargo-generate
 ```
 
+## Build & Flash 
+
+check [it](README-TEMPLATE.md)
+
 If you need doc about you use [crates](https://crates.io/), run this command
 
 ```bash
 cargo doc --open
 ```
+
 
 ## Prerequisites
 
