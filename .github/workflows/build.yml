@@ -1,6 +1,8 @@
 name: Build Template
 
 on:
+  schedule:
+      - cron: '0 8 * * 1'
   push:
     branches: ["*"]
     paths-ignore:
@@ -32,25 +34,6 @@ jobs:
             ch32x035,
             ch641,
           ]
-        include:
-          - mcu_family: ch32l003
-            target: riscv32imac-unknown-none-elf
-          - mcu_family: ch32v103
-            target: riscv32imac-unknown-none-elf
-          - mcu_family: ch32v203
-            target: riscv32imac-unknown-none-elf
-          - mcu_family: ch32v208
-            target: riscv32imac-unknown-none-elf
-          - mcu_family: ch32v303
-            target: riscv32imafc-unknown-none-elf
-          - mcu_family: ch32v305
-            target: riscv32imafc-unknown-none-elf
-          - mcu_family: ch32v307
-            target: riscv32imafc-unknown-none-elf
-          - mcu_family: ch32x033
-            target: riscv32imac-unknown-none-elf
-          - mcu_family: ch32x035
-            target: riscv32imac-unknown-none-elf
     runs-on: ubuntu-latest
 
     steps:
@@ -71,12 +54,7 @@ jobs:
           rustup default nightly
           rustup component add rust-src
           rustup update
-      - name: Install ${{ matrix.target }} target
-        if: ${{ matrix.target }}
-        run: |
-          cd ${{ runner.temp }}/$PROJECT_NAME
-          rustup target add ${{ matrix.target }}
-      - name: Build for ${{ matrix.mcu_family }}
+      - name: Build
         run: |
           cd ${{ runner.temp }}/$PROJECT_NAME
           cargo build --release
