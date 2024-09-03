@@ -40,7 +40,8 @@ cargo install cargo-generate
 cargo install --git https://github.com/ch32-rs/wlink
 ```
 
->[!NOTE]  [wlink](https://github.com/ch32-rs/wlink) needs to  be installed:
+> [!NOTE]
+> [wlink](https://github.com/ch32-rs/wlink) needs to  be installed:
 
 ## License
 
