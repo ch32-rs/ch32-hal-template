@@ -4,11 +4,10 @@ let targets = #{
     ch32v103: "riscv32imac-unknown-none-elf",
     ch32v203: "riscv32imac-unknown-none-elf",
     ch32v208: "riscv32imac-unknown-none-elf",
-    ch32v303: "riscv32imac-unknown-none-elf",
+    ch32v303: "riscv32imafc-unknown-none-elf",
     ch32v305: "riscv32imafc-unknown-none-elf",
     ch32v307: "riscv32imafc-unknown-none-elf",
     ch32x033: "riscv32imac-unknown-none-elf",
-    ch32x034: "riscv32imac-unknown-none-elf",
     ch32x035: "riscv32imac-unknown-none-elf",
 };
 
