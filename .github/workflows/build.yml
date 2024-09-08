@@ -1,0 +1,82 @@
+name: Build Template
+
+on:
+  push:
+    branches: ["*"]
+    paths-ignore:
+      - "**.md"
+  pull_request:
+    branches: ["*"]
+    paths-ignore:
+      - "**.md"
+
+env:
+  CARGO_TERM_COLOR: always
+  PROJECT_NAME: ch32-blink
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        mcu_family:
+          [
+            ch32l003,
+            ch32v003,
+            ch32v103,
+            ch32v203,
+            ch32v208,
+            ch32v303,
+            ch32v305,
+            ch32v307,
+            ch32x033,
+            ch32x035,
+            ch641,
+          ]
+        include:
+          - mcu_family: ch32l003
+            target: riscv32imac-unknown-none-elf
+          - mcu_family: ch32v103
+            target: riscv32imac-unknown-none-elf
+          - mcu_family: ch32v203
+            target: riscv32imac-unknown-none-elf
+          - mcu_family: ch32v208
+            target: riscv32imac-unknown-none-elf
+          - mcu_family: ch32v303
+            target: riscv32imafc-unknown-none-elf
+          - mcu_family: ch32v305
+            target: riscv32imafc-unknown-none-elf
+          - mcu_family: ch32v307
+            target: riscv32imafc-unknown-none-elf
+          - mcu_family: ch32x033
+            target: riscv32imac-unknown-none-elf
+          - mcu_family: ch32x035
+            target: riscv32imac-unknown-none-elf
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cargo-generate/cargo-generate-action@latest
+        with:
+          name: ${{ env.PROJECT_NAME }}
+          arguments: "--define mcu_family=${{ matrix.mcu_family }}"
+      # we need to move the generated project to a temp folder, away from the template project
+      # otherwise `cargo` runs would fail
+      # see https://github.com/rust-lang/cargo/issues/9922
+      - name: Move generated project to temp dir
+        run: |
+          mv $PROJECT_NAME ${{ runner.temp }}/
+      - name: Use nightly Rust
+        run: |
+          cd ${{ runner.temp }}/$PROJECT_NAME
+          rustup default nightly
+          rustup component add rust-src
+          rustup update
+      - name: Install ${{ matrix.target }} target
+        if: ${{ matrix.target }}
+        run: |
+          cd ${{ runner.temp }}/$PROJECT_NAME
+          rustup target add ${{ matrix.target }}
+      - name: Build for ${{ matrix.mcu_family }}
+        run: |
+          cd ${{ runner.temp }}/$PROJECT_NAME
+          cargo build --release
