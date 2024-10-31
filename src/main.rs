@@ -26,7 +26,6 @@ async fn blink(pin: AnyPin, interval_ms: u64) {
 async fn main(spawner: Spawner) -> ! {
     ch32_hal::debug::SDIPrint::enable();
     let p = ch32_hal::init(ch32_hal::Config::default());
-    ch32_hal::embassy::init();
 
     // Adjust the LED GPIO according to your board
     spawner.spawn(blink(p.PA0.degrade(), 1000)).unwrap();
