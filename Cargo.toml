@@ -5,6 +5,10 @@ authors = ["{{ authors }}"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
 
+[[bin]]
+name = "{{ project-name }}"
+harness = false # do not use the built in cargo test harness -> resolve rust-analyzer errors
+
 [dependencies]
 ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", features = [
     "{{ mcu }}",
