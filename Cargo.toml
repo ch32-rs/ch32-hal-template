@@ -19,7 +19,7 @@ ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", features = [
 ] }
 embassy-executor = { version = "0.6.1", features = [
     "integrated-timers",
-    "arch-riscv32",
+    "arch-spin",
     "executor-thread",
     "task-arena-size-128", # or better use nightly, but fails on recent Rust versions
 ] }
