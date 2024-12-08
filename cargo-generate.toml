@@ -1,10 +1,16 @@
 [template]
 cargo_generate_version = ">=0.19"
-ignore = [".git", "README.md"]
+ignore = [".git", ".github", "README.md"]
 
 [hooks]
 pre = ["pre-script.rhai"]
 post = ["post-script.rhai"]
+
+# Embassy option
+[placeholders.embassy]
+type = "bool"
+prompt = "Enable embassy (async) support?"
+default = true
 
 [placeholders.mcu_family]
 type = "string"
@@ -24,8 +30,11 @@ choices = [
 ]
 default = "ch32v003"
 
-[conditional.'mcu_family != "ch32v003 || mcu_family != "ch641"']
+[conditional.'mcu_family != "ch32v003" && mcu_family != "ch641"']
 ignore = ["riscv32ec-unknown-none-elf.json"]
+
+[conditional.'mcu_family != "ch32v303" && mcu_family != "ch32v305" && mcu_family != "ch32v307"']
+ignore = ["riscv32imfc-unknown-none-elf.json"]
 
 [conditional.'mcu_family == "ch32l003"'.placeholders]
 mcu = { type = "string", prompt = "Which ch32l003 variant to use?", choices = [

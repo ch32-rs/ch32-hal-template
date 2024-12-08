@@ -34,6 +34,7 @@ jobs:
             ch32x035,
             ch641,
           ]
+        embassy: [true, false]
         include:
           - mcu_family: ch32l003
             target: riscv32imac-unknown-none-elf
@@ -60,7 +61,7 @@ jobs:
       - uses: cargo-generate/cargo-generate-action@latest
         with:
           name: ${{ env.PROJECT_NAME }}
-          arguments: "--define mcu_family=${{ matrix.mcu_family }}"
+          arguments: "--define mcu_family=${{ matrix.mcu_family }} --define embassy=${{ matrix.embassy }}"
       # we need to move the generated project to a temp folder, away from the template project
       # otherwise `cargo` runs would fail
       # see https://github.com/rust-lang/cargo/issues/9922

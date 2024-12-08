@@ -1,5 +1,5 @@
 [toolchain]
-channel = "nightly-2024-06-12"
-{% if mcu_family != "ch32v003" and mcu_family != "ch641" -%}
+channel = "nightly"
+{% if target != "riscv32ec-unknown-none-elf" and target != "riscv32imfc-unknown-none-elf" -%}
 targets = ["{{ target }}"]
 {%- endif %}
