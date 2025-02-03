@@ -1,5 +1,6 @@
 [toolchain]
 channel = "nightly"
+components = ["rust-src"]
 {% if target != "riscv32ec-unknown-none-elf" and target != "riscv32imfc-unknown-none-elf" -%}
 targets = ["{{ target }}"]
 {%- endif %}
