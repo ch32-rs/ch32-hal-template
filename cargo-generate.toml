@@ -16,7 +16,7 @@ default = true
 type = "string"
 prompt = "Which MCU family to target?"
 choices = [
-    "ch32l003",
+    "ch32l103",
     "ch32v003",
     "ch32v103",
     "ch32v203",
@@ -36,8 +36,8 @@ ignore = ["riscv32ec-unknown-none-elf.json"]
 [conditional.'mcu_family != "ch32v303" && mcu_family != "ch32v305" && mcu_family != "ch32v307"']
 ignore = ["riscv32imfc-unknown-none-elf.json"]
 
-[conditional.'mcu_family == "ch32l003"'.placeholders]
-mcu = { type = "string", prompt = "Which ch32l003 variant to use?", choices = [
+[conditional.'mcu_family == "ch32l103"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32l103 variant to use?", choices = [
     "ch32l103c8t6",
     "ch32l103f8p6",
     "ch32l103f8u6",

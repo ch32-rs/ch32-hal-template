@@ -22,7 +22,7 @@ jobs:
       matrix:
         mcu_family:
           [
-            ch32l003,
+            ch32l103,
             ch32v003,
             ch32v103,
             ch32v203,
@@ -36,7 +36,7 @@ jobs:
           ]
         embassy: [true, false]
         include:
-          - mcu_family: ch32l003
+          - mcu_family: ch32l103
             target: riscv32imac-unknown-none-elf
           - mcu_family: ch32v103
             target: riscv32imac-unknown-none-elf
