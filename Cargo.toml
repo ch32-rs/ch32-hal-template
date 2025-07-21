@@ -23,13 +23,12 @@ ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", default-features =
     "memory-x",
 ] }
 {% if embassy_dep -%}
-embassy-executor = { version = "0.6.1", features = [
-    "integrated-timers",
+embassy-executor = { version = "0.7.0", features = [
     "arch-spin",
     "executor-thread",
-    "task-arena-size-192", # or better use nightly, but fails on recent Rust versions
+    "task-arena-size-192",
 ] }
-embassy-time = { version = "0.3.0" }
+embassy-time = { version = "0.4.0" }
 {%- endif %}
 qingke-rt = "0.5.0"
 qingke = "0.5.0"
