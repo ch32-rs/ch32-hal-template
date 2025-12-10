@@ -1,6 +1,5 @@
 # Rust ch32-hal-template 
 
-
 A template for use with [cargo-generate](https://github.com/cargo-generate/cargo-generate) to create applications targeting WCH's line of MCU.
 
 ## Generate the project
@@ -29,10 +28,9 @@ If you need doc about you use [crates](https://crates.io/), run this command
 cargo doc --open
 ```
 
-
 ## Prerequisites
 
-> If you are new to rust embedded, you can refer to detailed instructions  [Setting Up a Development Environment](https://esp-rs.github.io/book/installation/index.html) chapter of The Rust on ESP Book.
+> If you are new to rust embedded, you can refer to detailed instructions  [Setting Up a Development Environment](https://docs.espressif.com/projects/rust/book/getting-started/toolchain.html) chapter of The Rust on ESP Book.
 
 ### Install Rust (with `rustup`)
 
@@ -46,7 +44,7 @@ cargo install --git https://github.com/ch32-rs/wlink
 ```
 
 > [!NOTE]
-> [wlink](https://github.com/ch32-rs/wlink) needs to  be installed:
+> [wlink](https://github.com/ch32-rs/wlink) needs to  be installed
 
 ## License
 

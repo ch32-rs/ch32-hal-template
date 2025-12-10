@@ -23,15 +23,14 @@ ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", default-features =
     "memory-x",
 ] }
 {% if embassy_dep -%}
-embassy-executor = { version = "0.7.0", features = [
+embassy-executor = { version = "0.9.1", features = [
     "arch-spin",
-    "executor-thread",
-    "task-arena-size-192",
+    "executor-thread"
 ] }
-embassy-time = { version = "0.4.0" }
+embassy-time = { version = "0.5.0" }
 {%- endif %}
-qingke-rt = "0.5.0"
-qingke = "0.5.0"
+qingke-rt = "0.6.1"
+qingke = "0.6.1"
 embedded-hal = "1.0.0"
 panic-halt = "1.0.0"
 
