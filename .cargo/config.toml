@@ -13,4 +13,5 @@ runner = "wlink -v flash --enable-sdi-print --watch-serial"
 {% if target == "riscv32ec-unknown-none-elf" or target == "riscv32imfc-unknown-none-elf" -%}
 [unstable]
 build-std = ["core"]
+json-target-spec = true
 {% endif -%}
