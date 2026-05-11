@@ -1,6 +1,10 @@
 [toolchain]
+{% if target == "riscv32ec-unknown-none-elf" or target == "riscv32imfc-unknown-none-elf" -%}
 channel = "nightly"
+{%- else -%}
+channel = "stable"
+{%- endif %}
 components = ["rust-src"]
 {% if target != "riscv32ec-unknown-none-elf" and target != "riscv32imfc-unknown-none-elf" -%}
 targets = ["{{ target }}"]
-{%- endif %}
+{%- endif -%}
