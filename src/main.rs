@@ -29,7 +29,7 @@ async fn main(spawner: Spawner) -> ! {
     let p = ch32_hal::init(ch32_hal::Config::default());
 
     // Adjust the LED GPIO according to your board
-    spawner.spawn(blink(p.PA0.into(), 1000)).unwrap();
+    spawner.spawn(blink(p.PA0.into(), 1000).unwrap());
     loop {
         Timer::after_millis(1000).await;
         println!("tick");
