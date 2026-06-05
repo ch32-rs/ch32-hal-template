@@ -25,6 +25,7 @@ jobs:
           [
             ch32l103,
             ch32v003,
+            ch32v00x,
             ch32v103,
             ch32v203,
             ch32v208,

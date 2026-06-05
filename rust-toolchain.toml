@@ -5,6 +5,6 @@ channel = "nightly"
 channel = "stable"
 {%- endif %}
 components = ["rust-src"]
-{% if target != "riscv32ec-unknown-none-elf" and target != "riscv32imfc-unknown-none-elf" -%}
+{% if target != "riscv32ec-unknown-none-elf" and target != "riscv32emc-unknown-none-elf" and target != "riscv32imfc-unknown-none-elf" -%}
 targets = ["{{ target }}"]
 {%- endif -%}

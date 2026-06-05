@@ -18,6 +18,7 @@ prompt = "Which MCU family to target?"
 choices = [
     "ch32l103",
     "ch32v003",
+    "ch32v00x",
     "ch32v103",
     "ch32v203",
     "ch32v208",
@@ -32,6 +33,9 @@ default = "ch32v003"
 
 [conditional.'mcu_family != "ch32v003" && mcu_family != "ch641"']
 ignore = ["riscv32ec-unknown-none-elf.json"]
+
+[conditional.'mcu_family != "ch32v00x"']
+ignore = ["riscv32emc-unknown-none-elf.json"]
 
 [conditional.'mcu_family != "ch32v303" && mcu_family != "ch32v305" && mcu_family != "ch32v307"']
 ignore = ["riscv32imfc-unknown-none-elf.json"]
@@ -52,6 +56,40 @@ mcu = { type = "string", prompt = "Which ch32v003 variant to use?", choices = [
     "ch32v003f4u6",
     "ch32v003j4m6",
 ], default = "ch32v003f4p6" }
+
+[conditional.'mcu_family == "ch32v00x"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32v00x variant to use?", choices = [
+    "ch32v002f4p6",
+    "ch32v002f4u6",
+    "ch32v002a4m6",
+    "ch32v002d4u6",
+    "ch32v002j4m6",
+
+    "ch32v004f6p1",
+    "ch32v004f6u1",
+
+    "ch32v005e6r6",
+    "ch32v005f6u6",
+    "ch32v005f6p6",
+    "ch32v005d6u6",
+
+    "ch32v006k8u6",
+    "ch32v006e8r6",
+    "ch32v006f8u6",
+    "ch32v006f8p6",
+    "ch32v006f4u6",
+
+    "ch32m007g8r6",
+    "ch32m007e8r6",
+    "ch32m007e8u6",
+    "ch32v007e8r6",
+    "ch32v007k8u6",
+
+    "ch32v006e8r6",
+    "ch32v006f8u6",
+    "ch32v006f8p6",
+    "ch32v006k8u6",
+], default = "ch32v006k8u6" }
 
 [conditional.'mcu_family == "ch32v103"'.placeholders]
 mcu = { type = "string", prompt = "Which ch32v103 variant to use?", choices = [
