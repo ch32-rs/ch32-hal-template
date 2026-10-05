@@ -29,8 +29,8 @@ embassy-executor = { version = "0.10.0", features = [
 ] }
 embassy-time = { version = "0.5.1" }
 {%- endif %}
-qingke-rt = "0.7"
-qingke = "0.7"
+qingke-rt = "0.8"
+qingke = "0.8"
 embedded-hal = "1.0.0"
 panic-halt = "1.0.0"
 
