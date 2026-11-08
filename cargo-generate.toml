@@ -56,11 +56,12 @@ ignore = ["riscv32emc-unknown-none-elf.json"]
 ignore = ["memory-h417.x", "link-h417.x", "h417-dual"]
 
 # CH32H417: single-core V3F blink, or a dual-core (V3F+V5F) workspace.
+# Values stay space-free so CI `--define` args are not word-split.
 [conditional.'mcu_family == "ch32h417"'.placeholders]
 h417_mode = { type = "string", prompt = "CH32H417 core layout?", choices = [
-    "single-core (V3F only)",
-    "dual-core (V3F + V5F)",
-], default = "single-core (V3F only)" }
+    "single-core",
+    "dual-core",
+], default = "single-core" }
 
 [conditional.'mcu_family == "ch32l103"'.placeholders]
 mcu = { type = "string", prompt = "Which ch32l103 variant to use?", choices = [

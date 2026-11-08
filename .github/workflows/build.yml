@@ -151,16 +151,16 @@ jobs:
             target: riscv32imafc-unknown-none-elf
             embassy: true
             use_xwch_extensions: true
-            h417_mode: "single-core (V3F only)"
+            h417_mode: single-core
           - mcu_family: ch32h417
             target: riscv32imafc-unknown-none-elf
             embassy: false
             use_xwch_extensions: true
-            h417_mode: "single-core (V3F only)"
+            h417_mode: single-core
           - mcu_family: ch32h417
             embassy: false
             use_xwch_extensions: true
-            h417_mode: "dual-core (V3F + V5F)"
+            h417_mode: dual-core
             dualcore: true
           - mcu_family: ch643
             target: riscv32imc-unknown-none-elf

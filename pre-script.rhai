@@ -36,7 +36,7 @@ if mcu_family == "ch641" {
 // Normalize the H417 layout choice into a bool for liquid/post scripts.
 if mcu_family == "ch32h417" {
     let mode = variable::get("h417_mode");
-    if mode == "dual-core (V3F + V5F)" {
+    if mode == "dual-core" {
         variable::set("h417_dualcore", true);
     } else {
         variable::set("h417_dualcore", false);
