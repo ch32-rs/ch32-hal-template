@@ -1,0 +1,23 @@
+[package]
+name = "{{ project-name }}-v5f"
+version = "0.1.0"
+authors = ["{{ authors }}"]
+edition = "2024"
+license = "MIT OR Apache-2.0"
+
+[[bin]]
+name = "hello"
+path = "src/bin/hello.rs"
+harness = false
+
+[dependencies]
+# Hart 1 never calls `ch32_hal::init` (shared RCC / PLL). Hello drives GPIO
+# through the PAC after the boot core has already brought the chip up.
+ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", default-features = false, features = [
+    "ch32h417qeu6-v5f",
+    "rt",
+    "memory-x",
+] }
+qingke-rt = { version = "0.8.4", features = ["v5f"] }
+qingke = { version = "0.8.4", features = ["v5f", "dual-core", "unsafe-trust-wch-atomics"] }
+panic-halt = "1.0.0"

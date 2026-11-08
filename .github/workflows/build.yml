@@ -151,10 +151,17 @@ jobs:
             target: riscv32imafc-unknown-none-elf
             embassy: true
             use_xwch_extensions: true
+            h417_mode: "single-core (V3F only)"
           - mcu_family: ch32h417
             target: riscv32imafc-unknown-none-elf
             embassy: false
             use_xwch_extensions: true
+            h417_mode: "single-core (V3F only)"
+          - mcu_family: ch32h417
+            embassy: false
+            use_xwch_extensions: true
+            h417_mode: "dual-core (V3F + V5F)"
+            dualcore: true
           - mcu_family: ch643
             target: riscv32imc-unknown-none-elf
             embassy: true
@@ -175,6 +182,7 @@ jobs:
             --define embassy=${{ matrix.embassy }}
             --define use_xwch_extensions=${{ matrix.use_xwch_extensions }}
             ${{ matrix.mcu && format('--define mcu={0}', matrix.mcu) || '' }}
+            ${{ matrix.h417_mode && format('--define h417_mode={0}', matrix.h417_mode) || '' }}
       # Move the generated project away from the template so cargo does not get confused.
       # see https://github.com/rust-lang/cargo/issues/9922
       - name: Move generated project to temp dir
@@ -187,11 +195,17 @@ jobs:
           rustup component add rust-src
           rustup update
       - name: Install ${{ matrix.target }} target
-        if: ${{ matrix.target }}
+        if: ${{ matrix.target && !matrix.dualcore }}
         run: |
           cd ${{ runner.temp }}/$PROJECT_NAME
           rustup target add ${{ matrix.target }}
       - name: Build for ${{ matrix.mcu_family }}
+        if: ${{ !matrix.dualcore }}
         run: |
           cd ${{ runner.temp }}/$PROJECT_NAME
           cargo build --release
+      - name: Build H417 dual-core hello
+        if: ${{ matrix.dualcore }}
+        run: |
+          cd ${{ runner.temp }}/$PROJECT_NAME
+          cargo xtask build --example hello

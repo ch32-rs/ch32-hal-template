@@ -1,0 +1,24 @@
+[package]
+name = "{{ project-name }}-v3f"
+version = "0.1.0"
+authors = ["{{ authors }}"]
+edition = "2024"
+license = "MIT OR Apache-2.0"
+
+[[bin]]
+name = "hello"
+path = "src/bin/hello.rs"
+harness = false
+
+[dependencies]
+ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", default-features = false, features = [
+    "ch32h417qeu6-v3f",
+    "rt",
+    "memory-x",
+] }
+# `highcode`: startup copies .highcode (all .text/.rodata via link.x) into the
+# zero-wait shared SRAM. Hart 0 has no usable I-cache.
+qingke-rt = { version = "0.8.4", features = ["highcode"] }
+qingke = { version = "0.8.4", features = ["unsafe-trust-wch-atomics", "dual-core"] }
+embedded-hal = "1.0.0"
+panic-halt = "1.0.0"

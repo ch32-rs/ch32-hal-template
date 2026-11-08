@@ -22,7 +22,7 @@ let embassy = variable::get("embassy");
 let mcu_family = variable::get("mcu_family");
 let use_xwch_extensions = variable::get("use_xwch_extensions");
 
-// Families with only one variant (or v3f-only for H417 in this template).
+// Families with only one variant (H417 also asks single vs dual below).
 if mcu_family == "ch641" {
     variable::set("mcu", "ch641");
 } else if mcu_family == "ch643" {
@@ -31,6 +31,18 @@ if mcu_family == "ch641" {
     variable::set("mcu", "ch32x033f8p6");
 } else if mcu_family == "ch32h417" {
     variable::set("mcu", "ch32h417qeu6-v3f");
+}
+
+// Normalize the H417 layout choice into a bool for liquid/post scripts.
+if mcu_family == "ch32h417" {
+    let mode = variable::get("h417_mode");
+    if mode == "dual-core (V3F + V5F)" {
+        variable::set("h417_dualcore", true);
+    } else {
+        variable::set("h417_dualcore", false);
+    }
+} else {
+    variable::set("h417_dualcore", false);
 }
 
 // Resolve the Rust target. ch32v00x covers both QingKe V2A (v003, RV32E)
