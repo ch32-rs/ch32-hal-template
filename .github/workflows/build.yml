@@ -20,41 +20,149 @@ env:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
-        mcu_family:
-          [
-            ch32l103,
-            ch32v003,
-            ch32v103,
-            ch32v203,
-            ch32v208,
-            ch32v303,
-            ch32v305,
-            ch32v307,
-            ch32x033,
-            ch32x035,
-            ch641,
-          ]
-        embassy: [true, false]
         include:
+          # RV32E — custom JSON targets (nightly + build-std).
+          # ch32v00x default variant is v003 (ec); also cover a zmmul (emc) part.
+          - mcu_family: ch32v00x
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32v00x
+            embassy: false
+            use_xwch_extensions: true
+          - mcu_family: ch32v00x
+            mcu: ch32v006k8u6
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32v00x
+            mcu: ch32v006k8u6
+            embassy: false
+            use_xwch_extensions: true
+          - mcu_family: ch641
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch641
+            embassy: false
+            use_xwch_extensions: true
+
+          # Standard rustup targets
           - mcu_family: ch32l103
-            target: riscv32imac-unknown-none-elf
+            target: riscv32imc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32l103
+            target: riscv32imc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
           - mcu_family: ch32v103
-            target: riscv32imac-unknown-none-elf
+            target: riscv32imc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32v103
+            target: riscv32imc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
           - mcu_family: ch32v203
-            target: riscv32imac-unknown-none-elf
+            target: riscv32imc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32v203
+            target: riscv32imc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: false
+          - mcu_family: ch32v203
+            target: riscv32imc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
           - mcu_family: ch32v208
-            target: riscv32imac-unknown-none-elf
+            target: riscv32imc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32v208
+            target: riscv32imc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
           - mcu_family: ch32v303
             target: riscv32imafc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32v303
+            target: riscv32imafc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
           - mcu_family: ch32v305
             target: riscv32imafc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32v305
+            target: riscv32imafc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
           - mcu_family: ch32v307
             target: riscv32imafc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32v307
+            target: riscv32imafc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
+          - mcu_family: ch32v407
+            target: riscv32imc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32v407
+            target: riscv32imc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
+          - mcu_family: ch32v467
+            target: riscv32imc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32v467
+            target: riscv32imc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
           - mcu_family: ch32x033
-            target: riscv32imac-unknown-none-elf
+            target: riscv32imc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32x033
+            target: riscv32imc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
+          - mcu_family: ch32x034
+            target: riscv32imc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32x034
+            target: riscv32imc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
           - mcu_family: ch32x035
-            target: riscv32imac-unknown-none-elf
+            target: riscv32imc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32x035
+            target: riscv32imc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
+          - mcu_family: ch32h417
+            target: riscv32imafc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch32h417
+            target: riscv32imafc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
+          - mcu_family: ch643
+            target: riscv32imc-unknown-none-elf
+            embassy: true
+            use_xwch_extensions: true
+          - mcu_family: ch643
+            target: riscv32imc-unknown-none-elf
+            embassy: false
+            use_xwch_extensions: true
     runs-on: ubuntu-latest
 
     steps:
@@ -62,9 +170,12 @@ jobs:
       - uses: cargo-generate/cargo-generate-action@latest
         with:
           name: ${{ env.PROJECT_NAME }}
-          arguments: "--define mcu_family=${{ matrix.mcu_family }} --define embassy=${{ matrix.embassy }}"
-      # we need to move the generated project to a temp folder, away from the template project
-      # otherwise `cargo` runs would fail
+          arguments: >-
+            --define mcu_family=${{ matrix.mcu_family }}
+            --define embassy=${{ matrix.embassy }}
+            --define use_xwch_extensions=${{ matrix.use_xwch_extensions }}
+            ${{ matrix.mcu && format('--define mcu={0}', matrix.mcu) || '' }}
+      # Move the generated project away from the template so cargo does not get confused.
       # see https://github.com/rust-lang/cargo/issues/9922
       - name: Move generated project to temp dir
         run: |
@@ -75,11 +186,11 @@ jobs:
           rustup default nightly
           rustup component add rust-src
           rustup update
-      - name: Install ${{ matrix.target }} target
+      - name: Install ${{ matrix.target }} target
         if: ${{ matrix.target }}
         run: |
           cd ${{ runner.temp }}/$PROJECT_NAME
-          rustup target add ${{ matrix.target }}
+          rustup target add ${{ matrix.target }}
       - name: Build for ${{ matrix.mcu_family }}
         run: |
           cd ${{ runner.temp }}/$PROJECT_NAME

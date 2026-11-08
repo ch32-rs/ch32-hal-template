@@ -1,16 +1,19 @@
 [build]
 {% if target == "riscv32ec-unknown-none-elf" -%}
 target = "riscv32ec-unknown-none-elf.json"
-{%- elsif target == "riscv32imfc-unknown-none-elf" -%}
-target = "riscv32imfc-unknown-none-elf.json"
+{%- elsif target == "riscv32emc-unknown-none-elf" -%}
+target = "riscv32emc-unknown-none-elf.json"
 {%- else -%}
 target = "{{ target }}"
 {%- endif %}
 
 [target."{{ target }}"]
 runner = "wlink -v flash --enable-sdi-print --watch-serial"
+{% if xwch_extensions -%}
+rustflags = ["-C", "target-feature={{ xwch_features }}"]
+{% endif %}
 
-{% if target == "riscv32ec-unknown-none-elf" or target == "riscv32imfc-unknown-none-elf" -%}
+{% if target == "riscv32ec-unknown-none-elf" or target == "riscv32emc-unknown-none-elf" -%}
 [unstable]
 build-std = ["core"]
 json-target-spec = true
