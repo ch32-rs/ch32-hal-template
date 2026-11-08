@@ -62,8 +62,10 @@ if embassy {
     variable::set("embassy_dep", true);
 } else {
     // Even if embassy is not selected, keep the dependency for families whose
-    // USB support in ch32-hal currently depends on Embassy.
-    if mcu_family == "ch32v203" || mcu_family == "ch32v208"
+    // USB support in ch32-hal currently depends on Embassy (USBFS uses
+    // embassy_time::block_for).
+    if mcu_family == "ch32l103"
+        || mcu_family == "ch32v203" || mcu_family == "ch32v208"
         || mcu_family == "ch32v303" || mcu_family == "ch32v305" || mcu_family == "ch32v307"
         || mcu_family == "ch32v407" || mcu_family == "ch32v467"
         || mcu_family == "ch32h417" {
