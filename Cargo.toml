@@ -31,10 +31,17 @@ embassy-executor = { version = "0.10.0", features = [
 ] }
 embassy-time = { version = "0.5.1" }
 {%- endif %}
+{% if mcu_family == "ch32h417" -%}
+# `highcode`: startup copies .highcode (all .text/.rodata via link-h417.x) from
+# flash into the zero-wait shared SRAM. Hart 0 has no usable I-cache.
+qingke-rt = { version = "0.8.4", features = ["highcode"] }
+qingke = { version = "0.8.4", features = ["unsafe-trust-wch-atomics"] }
+{%- else -%}
 qingke-rt = "0.8.4"
 # `unsafe-trust-wch-atomics`: needed when the chosen target advertises the A
 # extension (e.g. riscv32imafc) even though WCH cores do not implement full CAS.
 qingke = { version = "0.8.4", features = ["unsafe-trust-wch-atomics"] }
+{%- endif %}
 embedded-hal = "1.0.0"
 panic-halt = "1.0.0"
 

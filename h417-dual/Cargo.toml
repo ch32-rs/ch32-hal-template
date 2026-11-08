@@ -1,0 +1,16 @@
+[workspace]
+members = ["v3f", "v5f", "xtask"]
+resolver = "2"
+
+[profile.dev]
+opt-level = "s"
+
+[profile.release]
+strip = false
+codegen-units = 1
+debug = 2
+debug-assertions = false
+incremental = false
+lto = "fat"
+opt-level = "s"
+overflow-checks = false
