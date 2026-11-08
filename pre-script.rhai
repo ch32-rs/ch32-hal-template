@@ -33,6 +33,27 @@ if mcu_family == "ch641" {
     variable::set("mcu", "ch32h417qeu6-v3f");
 }
 
+// Flashing tool used by the generated runner. `wlink` is WCH's own tool;
+// `probe-rs` addresses the chip by its probe-rs chip name.
+let flasher = variable::get("flasher");
+variable::set("use_probe_rs", flasher == "probe-rs");
+
+let mcu = variable::get("mcu");
+let probe_rs_chip = if mcu_family == "ch641" {
+    // The family value is a package-less name; probe-rs exposes concrete
+    // packages only, so default to the first one it lists.
+    "CH641F"
+} else if mcu_family == "ch643" {
+    "CH643W"
+} else if mcu_family == "ch32h417" {
+    // `mcu` names the V3F HAL feature (`ch32h417qeu6-v3f`); probe-rs knows
+    // the part as `CH32H417QEU6`.
+    "CH32H417QEU6"
+} else {
+    mcu.to_upper()
+};
+variable::set("probe_rs_chip", probe_rs_chip);
+
 // Normalize the H417 layout choice into a bool for liquid/post scripts.
 if mcu_family == "ch32h417" {
     let mode = variable::get("h417_mode");

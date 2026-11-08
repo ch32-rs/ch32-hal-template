@@ -44,7 +44,13 @@ cargo install --git https://github.com/ch32-rs/wlink
 ```
 
 > [!NOTE]
-> [wlink](https://github.com/ch32-rs/wlink) needs to  be installed
+> The generated project's runner can use either [wlink](https://github.com/ch32-rs/wlink)
+> or [probe-rs](https://probe.rs). Install whichever tool you picked when
+> generating (or both, and switch later by editing `.cargo/config.toml`):
+>
+> ```sh
+> cargo install probe-rs-tools --locked
+> ```
 
 ## License
 

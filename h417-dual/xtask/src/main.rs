@@ -2,7 +2,7 @@
 //!
 //! ```text
 //! cargo xtask build [--example NAME]
-//! cargo xtask flash --example NAME [--no-build]
+//! cargo xtask flash --example NAME [--no-build] [--flasher wlink|probe-rs]
 //! cargo xtask merge --example NAME [--out DIR]
 //! ```
 //!
@@ -15,6 +15,20 @@ use std::{env, fs};
 
 /// Bytes an erased flash byte reads as, used to pad the merged image.
 const ERASED: u8 = 0xFF;
+
+/// `probe-rs --chip` value for this board.
+const PROBE_RS_CHIP: &str = "CH32H417QEU6";
+
+/// Which tool programs the flash.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Flasher {
+    /// `wlink`, WCH's own tool.
+    Wlink,
+    /// `probe-rs`, which verifies each image and resets the chip once at the
+    /// end. It cannot choose between two attached probes, so `PROBE_RS_PROBE`
+    /// has to name one in that case.
+    ProbeRs,
+}
 
 struct Core {
     name: &'static str,
@@ -44,9 +58,15 @@ usage: cargo xtask <command> [options]
 commands:
   build [--example NAME]                 build both cores (default example: hello)
   flash --example NAME [--no-build]      build, then flash V3F then V5F
+        [--flasher wlink | probe-rs]     pick the programming tool
   merge --example NAME [--out DIR]       merge the images into .bin + .hex
 
-WLINK_PROBE=VID:PID:SERIAL (or a wlink index) pins every wlink call to one probe.
+flashing (default: {% if use_probe_rs %}probe-rs{% else %}wlink{% endif %}):
+  --flasher wlink        WCH's tool; resets and runs on the last image
+  --flasher probe-rs     verifies every image, then resets once at the end
+
+WLINK_PROBE=VID:PID:SERIAL (or a wlink index) pins every wlink call to one probe;
+PROBE_RS_PROBE names the probe for probe-rs. Both tools accept the same string.
 ";
 
 fn main() {
@@ -69,6 +89,7 @@ struct Options {
     example: String,
     no_build: bool,
     out: Option<PathBuf>,
+    flasher: Flasher,
 }
 
 impl Options {
@@ -77,6 +98,11 @@ impl Options {
             example: "hello".into(),
             no_build: false,
             out: None,
+{% if use_probe_rs -%}
+            flasher: Flasher::ProbeRs,
+{%- else -%}
+            flasher: Flasher::Wlink,
+{%- endif %}
         };
         let mut args = args.iter();
         while let Some(arg) = args.next() {
@@ -89,6 +115,17 @@ impl Options {
                 }
                 "--out" => opts.out = args.next().map(PathBuf::from),
                 "--no-build" => opts.no_build = true,
+                "--flasher" => {
+                    let tool = args
+                        .next()
+                        .cloned()
+                        .unwrap_or_else(|| fail("`--flasher` needs a tool"));
+                    opts.flasher = match tool.as_str() {
+                        "wlink" => Flasher::Wlink,
+                        "probe-rs" => Flasher::ProbeRs,
+                        other => fail(&format!("unknown flasher `{other}` (wlink | probe-rs)")),
+                    };
+                }
                 other => fail(&format!("unknown option `{other}`\n\n{USAGE}")),
             }
         }
@@ -176,16 +213,39 @@ fn flash(opts: &Options) {
     if !opts.no_build {
         build(opts);
     }
-    // V3F first with --no-run so the chip stays halted; the final V5F write
-    // resets and runs, by which time both images are in place.
-    for (i, core) in CORES.iter().enumerate() {
-        let elf = example_elf(core, &opts.example);
-        println!("flashing {} ({}) ...", core.name, opts.example);
-        let path = elf.to_str().expect("utf-8 path");
-        if i + 1 == CORES.len() {
-            run_wlink(&["flash", path], &root());
-        } else {
-            run_wlink(&["flash", "--no-run", path], &root());
+    // V3F first with `--no-run` so the chip stays halted; the final V5F write
+    // resets and runs, by which time both images are in place. probe-rs
+    // downloads without running, then resets once after both images are in.
+    match opts.flasher {
+        Flasher::Wlink => {
+            for (i, core) in CORES.iter().enumerate() {
+                let elf = example_elf(core, &opts.example);
+                println!("flashing {} ({}) ...", core.name, opts.example);
+                let path = elf.to_str().expect("utf-8 path");
+                if i + 1 == CORES.len() {
+                    run_wlink(&["flash", path], &root());
+                } else {
+                    run_wlink(&["flash", "--no-run", path], &root());
+                }
+            }
+        }
+        Flasher::ProbeRs => {
+            for core in &CORES {
+                let elf = example_elf(core, &opts.example);
+                println!("flashing {} ({}) with probe-rs ...", core.name, opts.example);
+                run(
+                    "probe-rs",
+                    &[
+                        "download",
+                        "--chip",
+                        PROBE_RS_CHIP,
+                        "--verify",
+                        elf.to_str().expect("utf-8 path"),
+                    ],
+                    &root(),
+                );
+            }
+            run("probe-rs", &["reset", "--chip", PROBE_RS_CHIP], &root());
         }
     }
 }
