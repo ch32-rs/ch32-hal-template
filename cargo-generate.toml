@@ -23,7 +23,6 @@ type = "string"
 prompt = "Which MCU family to target?"
 choices = [
     "ch32l103",
-    "ch32v003",
     "ch32v00x",
     "ch32v103",
     "ch32v203",
@@ -40,10 +39,12 @@ choices = [
     "ch641",
     "ch643",
 ]
-default = "ch32v003"
+default = "ch32v00x"
 
 # Custom JSON targets are only needed for RV32E (no standard rustup target).
-[conditional.'mcu_family != "ch32v003" && mcu_family != "ch641"']
+# ch32v00x may need either ec (v003) or emc (v002/004/005/006/007/m007);
+# post-script.rhai drops the unused one after the variant is known.
+[conditional.'mcu_family != "ch32v00x" && mcu_family != "ch641"']
 ignore = ["riscv32ec-unknown-none-elf.json"]
 
 [conditional.'mcu_family != "ch32v00x"']
@@ -62,16 +63,12 @@ mcu = { type = "string", prompt = "Which ch32l103 variant to use?", choices = [
     "ch32l103k8u6",
 ], default = "ch32l103f8p6" }
 
-[conditional.'mcu_family == "ch32v003"'.placeholders]
-mcu = { type = "string", prompt = "Which ch32v003 variant to use?", choices = [
+[conditional.'mcu_family == "ch32v00x"'.placeholders]
+mcu = { type = "string", prompt = "Which ch32v00x variant to use?", choices = [
     "ch32v003a4m6",
     "ch32v003f4p6",
     "ch32v003f4u6",
     "ch32v003j4m6",
-], default = "ch32v003f4p6" }
-
-[conditional.'mcu_family == "ch32v00x"'.placeholders]
-mcu = { type = "string", prompt = "Which ch32v00x variant to use?", choices = [
     "ch32v002f4p6",
     "ch32v002f4u6",
     "ch32v002a4m6",
@@ -93,7 +90,7 @@ mcu = { type = "string", prompt = "Which ch32v00x variant to use?", choices = [
     "ch32m007e8u6",
     "ch32v007e8r6",
     "ch32v007k8u6",
-], default = "ch32v006k8u6" }
+], default = "ch32v003f4p6" }
 
 [conditional.'mcu_family == "ch32v103"'.placeholders]
 mcu = { type = "string", prompt = "Which ch32v103 variant to use?", choices = [

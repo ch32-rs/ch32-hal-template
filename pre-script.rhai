@@ -1,7 +1,6 @@
 let targets = #{
     ch32l103: "riscv32imc-unknown-none-elf",
-    ch32v003: "riscv32ec-unknown-none-elf",
-    ch32v00x: "riscv32emc-unknown-none-elf",
+    // ch32v00x target depends on the concrete variant (set below).
     ch32v103: "riscv32imc-unknown-none-elf",
     ch32v203: "riscv32imc-unknown-none-elf",
     ch32v208: "riscv32imc-unknown-none-elf",
@@ -22,8 +21,6 @@ let targets = #{
 let embassy = variable::get("embassy");
 let mcu_family = variable::get("mcu_family");
 let use_xwch_extensions = variable::get("use_xwch_extensions");
-let target = targets.get(mcu_family);
-variable::set("target", `${target}`);
 
 // Families with only one variant (or v3f-only for H417 in this template).
 if mcu_family == "ch641" {
@@ -36,10 +33,25 @@ if mcu_family == "ch641" {
     variable::set("mcu", "ch32h417qeu6-v3f");
 }
 
+// Resolve the Rust target. ch32v00x covers both QingKe V2A (v003, RV32E)
+// and V2C (v002/004/005/006/007/m007, RV32E+zmmul).
+if mcu_family == "ch32v00x" {
+    let mcu = variable::get("mcu");
+    if mcu == "ch32v003a4m6" || mcu == "ch32v003f4p6"
+        || mcu == "ch32v003f4u6" || mcu == "ch32v003j4m6" {
+        variable::set("target", "riscv32ec-unknown-none-elf");
+    } else {
+        variable::set("target", "riscv32emc-unknown-none-elf");
+    }
+} else {
+    let target = targets.get(mcu_family);
+    variable::set("target", `${target}`);
+}
+
 // Optional WCH ISA extensions via rustflags on top of a standard rustup target.
-// RV32E families (v003/v00x/ch641) always use a custom JSON that already embeds
+// RV32E families (v00x/ch641) always use a custom JSON that already embeds
 // +xwchc, so rustflags are unnecessary there.
-let rv32e = mcu_family == "ch32v003" || mcu_family == "ch32v00x" || mcu_family == "ch641";
+let rv32e = mcu_family == "ch32v00x" || mcu_family == "ch641";
 if use_xwch_extensions && !rv32e {
     variable::set("xwch_extensions", true);
     if mcu_family == "ch32v407" || mcu_family == "ch32v467" {

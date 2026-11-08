@@ -23,17 +23,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # RV32E — custom JSON targets (nightly + build-std)
-          - mcu_family: ch32v003
+          # RV32E — custom JSON targets (nightly + build-std).
+          # ch32v00x default variant is v003 (ec); also cover a zmmul (emc) part.
+          - mcu_family: ch32v00x
             embassy: true
             use_xwch_extensions: true
-          - mcu_family: ch32v003
+          - mcu_family: ch32v00x
             embassy: false
             use_xwch_extensions: true
           - mcu_family: ch32v00x
+            mcu: ch32v006k8u6
             embassy: true
             use_xwch_extensions: true
           - mcu_family: ch32v00x
+            mcu: ch32v006k8u6
             embassy: false
             use_xwch_extensions: true
           - mcu_family: ch641
@@ -167,7 +170,11 @@ jobs:
       - uses: cargo-generate/cargo-generate-action@latest
         with:
           name: ${{ env.PROJECT_NAME }}
-          arguments: "--define mcu_family=${{ matrix.mcu_family }} --define embassy=${{ matrix.embassy }} --define use_xwch_extensions=${{ matrix.use_xwch_extensions }}"
+          arguments: >-
+            --define mcu_family=${{ matrix.mcu_family }}
+            --define embassy=${{ matrix.embassy }}
+            --define use_xwch_extensions=${{ matrix.use_xwch_extensions }}
+            ${{ matrix.mcu && format('--define mcu={0}', matrix.mcu) || '' }}
       # Move the generated project away from the template so cargo does not get confused.
       # see https://github.com/rust-lang/cargo/issues/9922
       - name: Move generated project to temp dir
