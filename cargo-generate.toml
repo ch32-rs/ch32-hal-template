@@ -18,6 +18,15 @@ type = "bool"
 prompt = "Enable WCH custom RISC-V extensions (+xwchc, etc.)?"
 default = true
 
+# Flashing tool selected by the generated `.cargo/config.toml` runner. The
+# H417 dual-core xtask uses the same value as its default for
+# `cargo xtask flash --flasher ...`.
+[placeholders.flasher]
+type = "string"
+prompt = "Which flashing tool should `cargo run` use?"
+choices = ["wlink", "probe-rs"]
+default = "wlink"
+
 [placeholders.mcu_family]
 type = "string"
 prompt = "Which MCU family to target?"

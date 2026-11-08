@@ -8,7 +8,11 @@ target = "{{ target }}"
 {%- endif %}
 
 [target."{{ target }}"]
+{% if use_probe_rs -%}
+runner = "probe-rs run --chip {{ probe_rs_chip }}{% if mcu_family == "ch32h417" %} --scan-region ram{% endif %}"
+{%- else -%}
 runner = "wlink -v flash --enable-sdi-print --watch-serial"
+{%- endif %}
 {% if xwch_extensions -%}
 rustflags = ["-C", "target-feature={{ xwch_features }}"]
 {% endif %}

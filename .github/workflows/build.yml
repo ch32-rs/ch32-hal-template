@@ -70,6 +70,11 @@ jobs:
           - mcu_family: ch32v203
             target: riscv32imc-unknown-none-elf
             embassy: true
+            use_xwch_extensions: true
+            flasher: probe-rs
+          - mcu_family: ch32v203
+            target: riscv32imc-unknown-none-elf
+            embassy: true
             use_xwch_extensions: false
           - mcu_family: ch32v203
             target: riscv32imc-unknown-none-elf
@@ -162,6 +167,12 @@ jobs:
             use_xwch_extensions: true
             h417_mode: dual-core
             dualcore: true
+          - mcu_family: ch32h417
+            embassy: false
+            use_xwch_extensions: true
+            h417_mode: dual-core
+            dualcore: true
+            flasher: probe-rs
           - mcu_family: ch643
             target: riscv32imc-unknown-none-elf
             embassy: true
@@ -183,6 +194,7 @@ jobs:
             --define use_xwch_extensions=${{ matrix.use_xwch_extensions }}
             ${{ matrix.mcu && format('--define mcu={0}', matrix.mcu) || '' }}
             ${{ matrix.h417_mode && format('--define h417_mode={0}', matrix.h417_mode) || '' }}
+            ${{ matrix.flasher && format('--define flasher={0}', matrix.flasher) || '--define flasher=wlink' }}
       # Move the generated project away from the template so cargo does not get confused.
       # see https://github.com/rust-lang/cargo/issues/9922
       - name: Move generated project to temp dir
